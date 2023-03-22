@@ -14,7 +14,7 @@ export class CreateUserServiceImpl<T extends EntityManager>
     private userRepository: UserRepository<EntityManager>,
   ) {}
 
-  async create(
+  async handler(
     transaction: T,
     createUserDto: CreateUserDto,
   ): Promise<UserEntity> {

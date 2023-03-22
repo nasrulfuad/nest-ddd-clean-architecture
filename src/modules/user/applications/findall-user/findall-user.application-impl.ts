@@ -18,7 +18,7 @@ export class FindAllUserApplicationImpl implements FindAllUserApplication {
     findAllUserQueryDto: FindAllUserQueryDto,
   ): Promise<[UserEntity[], number]> {
     return this.dataSource.transaction(async (transaction) => {
-      return await this.findAllUserService.findAll(
+      return await this.findAllUserService.handler(
         transaction,
         findAllUserQueryDto,
       );

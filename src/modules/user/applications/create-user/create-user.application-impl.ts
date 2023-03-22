@@ -15,7 +15,7 @@ export class CreateUserApplicationImpl implements CreateUserApplication {
 
   async execute(createUserDto: CreateUserDto) {
     return await this.dataSource.transaction(async (transactionManager) => {
-      return await this.createUserService.create(
+      return await this.createUserService.handler(
         transactionManager,
         createUserDto,
       );

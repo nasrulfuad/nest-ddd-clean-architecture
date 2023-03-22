@@ -13,7 +13,7 @@ export class FindOneUserServiceImpl<T extends EntityManager>
     private userRepository: UserRepository<T>,
   ) {}
 
-  async findOne(transaction: T, id: string): Promise<UserEntity | null> {
+  async handler(transaction: T, id: string): Promise<UserEntity | null> {
     const r = await this.userRepository.findById(transaction, id);
     if (r) {
       return r;

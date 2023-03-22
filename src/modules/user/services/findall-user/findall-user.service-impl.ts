@@ -15,7 +15,7 @@ export class FindAllUserServiceImpl<T extends EntityManager>
     private userRepository: UserRepository<T>,
   ) {}
 
-  async findAll(
+  async handler(
     transaction: T,
     findAllUserQueryDto: FindAllUserQueryDto,
   ): Promise<[UserEntity[], number]> {

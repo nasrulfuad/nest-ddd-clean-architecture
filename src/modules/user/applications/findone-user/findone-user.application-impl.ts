@@ -15,7 +15,7 @@ export class FindOneUserApplicationImpl implements FindOneUserApplication {
 
   async execute(id: string): Promise<UserEntity | null> {
     return await this.dataSource.transaction(async (transaction) => {
-      return this.findOneUserService.findOne(transaction, id);
+      return this.findOneUserService.handler(transaction, id);
     });
   }
 }
