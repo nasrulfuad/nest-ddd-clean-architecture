@@ -3,28 +3,31 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, ILike, Repository } from 'typeorm';
 import { CreateUserDto } from '../web/dto/create-user.dto';
 import { FindAllUserQueryDto } from '../web/dto/findall-user.query-dto';
-import { User } from '../web/entities/user.entity';
-import { UserImpl } from '../web/entities/user.entity-impl';
+import { UserEntity } from '../web/entities/user.entity';
+import { UserEntityImpl } from '../web/entities/user.entity-impl';
 import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserRepositoryImpl implements UserRepository {
   constructor(
-    @InjectRepository(UserImpl)
-    private userDataSource: Repository<UserImpl>,
+    @InjectRepository(UserEntityImpl)
+    private userDataSource: Repository<UserEntity>,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    const u = new UserImpl();
-    u.name = createUserDto.name;
-    u.email = createUserDto.email;
-    u.password = createUserDto.password;
-    const r = await this.userDataSource.save(u);
+  async create(createUserDto: CreateUserDto): Promise<UserEntity> {
+    const { name, email, password } = createUserDto;
+
+    const r = await this.userDataSource.save(
+      new UserEntityImpl(name, email, password),
+    );
+
     return r;
   }
 
-  async findAll(findAllUserQueryDto: FindAllUserQueryDto): Promise<User[]> {
-    const options: FindManyOptions<UserImpl> = {};
+  async findAll(
+    findAllUserQueryDto: FindAllUserQueryDto,
+  ): Promise<UserEntity[]> {
+    const options: FindManyOptions<UserEntityImpl> = {};
 
     if (findAllUserQueryDto.name) {
       options.where = {
@@ -34,5 +37,11 @@ export class UserRepositoryImpl implements UserRepository {
 
     const r = await this.userDataSource.find(options);
     return r;
+  }
+
+  async findByEmail(email: string): Promise<UserEntity> {
+    return await this.userDataSource.findOne({
+      where: { email },
+    });
   }
 }

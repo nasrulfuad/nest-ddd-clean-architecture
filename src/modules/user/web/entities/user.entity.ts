@@ -1,6 +1,6 @@
 import { Entity } from 'src/common/interfaces/entity';
 
-export interface User extends Entity {
+export interface UserEntity extends Entity {
   name: string;
   email: string;
   password: string;

@@ -7,10 +7,10 @@ import { UserRepositoryImpl } from './repository/user.repository-impl';
 import { CreateUserServiceImpl } from './services/create-user/create-user.service-impl';
 import { FindAllUserServiceImpl } from './services/findall-user/findall-user.service-impl';
 import { UserController } from './user.controller';
-import { UserImpl } from './web/entities/user.entity-impl';
+import { UserEntityImpl } from './web/entities/user.entity-impl';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserImpl])],
+  imports: [TypeOrmModule.forFeature([UserEntityImpl])],
   controllers: [UserController],
   providers: [
     {

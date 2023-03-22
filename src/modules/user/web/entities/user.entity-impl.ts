@@ -7,10 +7,16 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from './user.entity';
+import { UserEntity } from './user.entity';
 
 @Entity({ name: 'users' })
-export class UserImpl implements User {
+export class UserEntityImpl implements UserEntity {
+  constructor(name: string, email: string, password: string) {
+    this.email = email;
+    this.name = name;
+    this.password = password;
+  }
+
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
