@@ -1,8 +1,13 @@
 export const UserUseCase = {
-  services: {
-    CreateUserService: 'CreateUserService',
-  },
   applications: {
     CreateUserApplication: 'CreateUserApplication',
+    FindAllUserApplication: 'FindAllUserApplication',
+  },
+  services: {
+    CreateUserService: 'CreateUserService',
+    FindAllUserService: 'FindAllUserService',
+  },
+  repositories: {
+    UserRepository: 'UserRepository',
   },
 };
