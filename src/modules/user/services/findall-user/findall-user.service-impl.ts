@@ -14,7 +14,7 @@ export class FindAllUserServiceImpl implements FindAllUserService {
 
   async findAll(
     findAllUserQueryDto: FindAllUserQueryDto,
-  ): Promise<UserEntity[]> {
+  ): Promise<[UserEntity[], number]> {
     return this.userRepository.findAll(findAllUserQueryDto);
   }
 }

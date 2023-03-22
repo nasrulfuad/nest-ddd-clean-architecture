@@ -12,7 +12,9 @@ export class FindAllUserApplicationImpl implements FindAllUserApplication {
     private findAllUserService: FindAllUserService,
   ) {}
 
-  execute(findAllUserQueryDto: FindAllUserQueryDto): Promise<UserEntity[]> {
+  execute(
+    findAllUserQueryDto: FindAllUserQueryDto,
+  ): Promise<[UserEntity[], number]> {
     return this.findAllUserService.findAll(findAllUserQueryDto);
   }
 }

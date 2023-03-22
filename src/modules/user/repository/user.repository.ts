@@ -4,6 +4,8 @@ import { UserEntity } from '../web/entities/user.entity';
 
 export interface UserRepository {
   create(createUserDto: CreateUserDto): Promise<UserEntity>;
-  findAll(findAllUserQueryDto: FindAllUserQueryDto): Promise<UserEntity[]>;
+  findAll(
+    findAllUserQueryDto: FindAllUserQueryDto,
+  ): Promise<[UserEntity[], number]>;
   findByEmail(email: string): Promise<UserEntity | null>;
 }

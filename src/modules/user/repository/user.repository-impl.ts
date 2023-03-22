@@ -26,8 +26,10 @@ export class UserRepositoryImpl implements UserRepository {
 
   async findAll(
     findAllUserQueryDto: FindAllUserQueryDto,
-  ): Promise<UserEntity[]> {
-    const options: FindManyOptions<UserEntityImpl> = {};
+  ): Promise<[UserEntity[], number]> {
+    const options: FindManyOptions<UserEntityImpl> = {
+      where: {},
+    };
 
     if (findAllUserQueryDto.name) {
       options.where = {
@@ -35,7 +37,15 @@ export class UserRepositoryImpl implements UserRepository {
       };
     }
 
-    const r = await this.userDataSource.find(options);
+    if (findAllUserQueryDto.page) {
+      options.skip = findAllUserQueryDto.skip;
+    }
+
+    if (findAllUserQueryDto.perPage) {
+      options.take = findAllUserQueryDto.perPage;
+    }
+
+    const r = await this.userDataSource.findAndCount(options);
     return r;
   }
 
