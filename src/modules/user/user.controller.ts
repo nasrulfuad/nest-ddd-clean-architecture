@@ -3,9 +3,19 @@ import {
   PaginationMetaImpl,
 } from '@common/web/pagination/pagination-impl';
 import { WebResponseImpl } from '@common/web/web.response-impl';
-import { Body, Controller, Get, Inject, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { CreateUserApplication } from './applications/create-user/create-user.application';
 import { FindAllUserApplication } from './applications/findall-user/findall-user.application';
+import { FindOneUserApplication } from './applications/findone-user/findone-user.appliaction';
 import { UserUseCase } from './interfaces/user-usecase';
 import { CreateUserDto } from './web/dto/create-user.dto';
 import { FindAllUserQueryDto } from './web/dto/findall-user.query-dto';
@@ -21,6 +31,8 @@ export class UserController {
     private createUserApplication: CreateUserApplication,
     @Inject(UserUseCase.applications.FindAllUserApplication)
     private findAllUserApplication: FindAllUserApplication,
+    @Inject(UserUseCase.applications.FindOneUserApplication)
+    private findOneUserApplication: FindOneUserApplication,
   ) {}
 
   @Post()
@@ -47,6 +59,17 @@ export class UserController {
         findAllUserQueryDto.perPage,
         totalItems,
       ),
+    );
+  }
+
+  @Get('/:id')
+  async findOne(
+    @Param('id', new ParseUUIDPipe())
+    id: string,
+  ) {
+    return new WebResponseImpl(
+      'Get a user successfully',
+      await this.findOneUserApplication.execute(id),
     );
   }
 }

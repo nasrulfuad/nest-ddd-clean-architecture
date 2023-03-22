@@ -9,4 +9,5 @@ export interface UserRepository<T> {
     findAllUserQueryDto: FindAllUserQueryDto,
   ): Promise<[UserEntity[], number]>;
   findByEmail(transaction: T, email: string): Promise<UserEntity | null>;
+  findById(transaction: T, id: string): Promise<UserEntity | null>;
 }

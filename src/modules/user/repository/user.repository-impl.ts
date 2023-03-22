@@ -47,6 +47,12 @@ export class UserRepositoryImpl<T extends EntityManager>
     return await transaction.findAndCount(UserEntityImpl, options);
   }
 
+  async findById(transaction: T, id: string): Promise<UserEntity> {
+    return await transaction.findOne(UserEntityImpl, {
+      where: { id },
+    });
+  }
+
   async findByEmail(transaction: T, email: string): Promise<UserEntity> {
     return await transaction.findOne(UserEntityImpl, {
       where: { email },
