@@ -1,10 +1,10 @@
+import { CreateUserDto } from '@module-user/web/dto/create-user.dto';
+import { FindAllUserQueryDto } from '@module-user/web/dto/findall-user.query-dto';
+import { UserEntity } from '@module-user/web/entities/user.entity';
+import { UserEntityImpl } from '@module-user/web/entities/user.entity-impl';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, ILike, Repository } from 'typeorm';
-import { CreateUserDto } from '../web/dto/create-user.dto';
-import { FindAllUserQueryDto } from '../web/dto/findall-user.query-dto';
-import { UserEntity } from '../web/entities/user.entity';
-import { UserEntityImpl } from '../web/entities/user.entity-impl';
 import { UserRepository } from './user.repository';
 
 @Injectable()

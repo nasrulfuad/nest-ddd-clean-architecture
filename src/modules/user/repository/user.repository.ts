@@ -1,6 +1,6 @@
-import { CreateUserDto } from '../web/dto/create-user.dto';
-import { FindAllUserQueryDto } from '../web/dto/findall-user.query-dto';
-import { UserEntity } from '../web/entities/user.entity';
+import { CreateUserDto } from '@module-user/web/dto/create-user.dto';
+import { FindAllUserQueryDto } from '@module-user/web/dto/findall-user.query-dto';
+import { UserEntity } from '@module-user/web/entities/user.entity';
 
 export interface UserRepository {
   create(createUserDto: CreateUserDto): Promise<UserEntity>;

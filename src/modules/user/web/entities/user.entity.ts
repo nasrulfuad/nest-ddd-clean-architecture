@@ -1,4 +1,4 @@
-import { Entity } from 'src/common/interfaces/entity';
+import { Entity } from '@common/interfaces/entity';
 
 export interface UserEntity extends Entity {
   name: string;

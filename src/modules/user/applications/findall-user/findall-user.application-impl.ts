@@ -1,8 +1,8 @@
+import { UserUseCase } from '@module-user/interfaces/user-usecase';
+import { FindAllUserService } from '@module-user/services/findall-user/findall-user.service';
+import { FindAllUserQueryDto } from '@module-user/web/dto/findall-user.query-dto';
+import { UserEntity } from '@module-user/web/entities/user.entity';
 import { Inject, Injectable } from '@nestjs/common';
-import { UserUseCase } from '../../interfaces/user-usecase';
-import { FindAllUserService } from '../../services/findall-user/findall-user.service';
-import { FindAllUserQueryDto } from '../../web/dto/findall-user.query-dto';
-import { UserEntity } from '../../web/entities/user.entity';
 import { FindAllUserApplication } from './findall-user.application';
 
 @Injectable()

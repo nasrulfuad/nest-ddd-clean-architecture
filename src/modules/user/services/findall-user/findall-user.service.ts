@@ -1,5 +1,5 @@
-import { UserEntity } from 'src/modules/user/web/entities/user.entity';
-import { FindAllUserQueryDto } from '../../web/dto/findall-user.query-dto';
+import { UserEntity } from '@module-user/web/entities/user.entity';
+import { FindAllUserQueryDto } from '@module-user/web/dto/findall-user.query-dto';
 
 export interface FindAllUserService {
   findAll(

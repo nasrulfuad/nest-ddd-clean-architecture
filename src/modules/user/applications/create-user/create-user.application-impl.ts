@@ -1,7 +1,7 @@
+import { UserUseCase } from '@module-user/interfaces/user-usecase';
+import { CreateUserService } from '@module-user/services/create-user/create-user.service';
+import { CreateUserDto } from '@module-user/web/dto/create-user.dto';
 import { Inject, Injectable } from '@nestjs/common';
-import { UserUseCase } from 'src/modules/user/interfaces/user-usecase';
-import { CreateUserService } from 'src/modules/user/services/create-user/create-user.service';
-import { CreateUserDto } from '../../web/dto/create-user.dto';
 import { CreateUserApplication } from './create-user.application';
 
 @Injectable()

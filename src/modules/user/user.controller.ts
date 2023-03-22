@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Inject, Post, Query } from '@nestjs/common';
 import {
   PaginationImpl,
   PaginationMetaImpl,
-} from 'src/common/web/pagination/pagination-impl';
-import { WebResponseImpl } from 'src/common/web/web.response-impl';
+} from '@common/web/pagination/pagination-impl';
+import { WebResponseImpl } from '@common/web/web.response-impl';
+import { Body, Controller, Get, Inject, Post, Query } from '@nestjs/common';
 import { CreateUserApplication } from './applications/create-user/create-user.application';
 import { FindAllUserApplication } from './applications/findall-user/findall-user.application';
 import { UserUseCase } from './interfaces/user-usecase';
