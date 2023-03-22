@@ -1,4 +1,4 @@
-import { WebResponse } from '../web.response';
+import { WebResponse } from '@common/web/web.response';
 
 export interface Pagination<T> {
   webResponse: WebResponse<T[]>;

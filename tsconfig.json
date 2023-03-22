@@ -12,6 +12,8 @@
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
     "paths": {
       "@module-user/*": ["src/modules/user/*"],
       "@common/*": ["./src/common/*"],

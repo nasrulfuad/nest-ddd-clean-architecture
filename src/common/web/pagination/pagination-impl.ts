@@ -1,5 +1,4 @@
-import { Entity } from '../../interfaces/entity';
-import { WebResponse } from '../web.response';
+import { WebResponse } from '@common/web/web.response';
 import { Pagination, PaginationMeta } from './pagination';
 
 export class PaginationMetaImpl implements PaginationMeta {

@@ -8,10 +8,10 @@ import {
 } from '@nestjs/common';
 import { Response as ExpressResponse } from 'express';
 import { map, Observable } from 'rxjs';
-import { Pagination } from '../web/pagination/pagination';
-import { PaginationImpl } from '../web/pagination/pagination-impl';
-import { WebResponse } from '../web/web.response';
-import { WebResponseImpl } from '../web/web.response-impl';
+import { Pagination } from '@common/web/pagination/pagination';
+import { PaginationImpl } from '@common/web/pagination/pagination-impl';
+import { WebResponse } from '@common/web/web.response';
+import { WebResponseImpl } from '@common/web/web.response-impl';
 
 interface Response {
   statusCode: HttpStatus;

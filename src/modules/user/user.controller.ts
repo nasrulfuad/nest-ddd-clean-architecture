@@ -26,7 +26,7 @@ export class UserController {
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     return new WebResponseImpl(
-      'Create user successfully',
+      'Create a user successfully',
       await this.createUserApplication.execute(createUserDto),
     );
   }
