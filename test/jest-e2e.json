@@ -3,7 +3,13 @@
   "rootDir": ".",
   "testEnvironment": "node",
   "testRegex": ".e2e-spec.ts$",
+  "verbose": true,
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "^@src/(.*)": "<rootDir>../src/$1",
+    "^@module-user/(.*)": "<rootDir>../src/modules/user/$1",
+    "^@common/(.*)": "<rootDir>../src/common/$1"
   }
 }

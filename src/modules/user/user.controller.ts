@@ -1,17 +1,19 @@
 import {
   PaginationImpl,
-  PaginationMetaImpl,
+  PaginationMetaImpl
 } from '@common/web/pagination/pagination-impl';
 import { WebResponseImpl } from '@common/web/web.response-impl';
 import {
   Body,
   Controller,
   Get,
+  HttpCode,
+  HttpStatus,
   Inject,
   Param,
   ParseUUIDPipe,
   Post,
-  Query,
+  Query
 } from '@nestjs/common';
 import { CreateUserApplication } from './applications/create-user/create-user.application';
 import { FindAllUserApplication } from './applications/findall-user/findall-user.application';
@@ -36,6 +38,7 @@ export class UserController {
   ) {}
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   async create(@Body() createUserDto: CreateUserDto) {
     return new WebResponseImpl(
       'Create a user successfully',

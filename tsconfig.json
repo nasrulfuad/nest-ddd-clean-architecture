@@ -15,8 +15,9 @@
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "paths": {
-      "@module-user/*": ["src/modules/user/*"],
+      "@src/*": ["./src/*"],
       "@common/*": ["./src/common/*"],
+      "@module-user/*": ["src/modules/user/*"],
     }
   }
 }

@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing';
 import { AppModule } from './../src/app.module';
 import { INestApplication } from '@nestjs/common';
 
-describe('AppController (e2e)', () => {
+describe('AppController', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
@@ -19,7 +19,7 @@ describe('AppController (e2e)', () => {
     await app.close();
   });
 
-  it('/ (GET)', () => {
+  it('[GET] /api/v1 🚀 Success response "Hello World"', () => {
     return request(app.getHttpServer())
       .get('/')
       .expect(200)

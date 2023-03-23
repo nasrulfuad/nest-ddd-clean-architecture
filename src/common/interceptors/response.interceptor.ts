@@ -1,17 +1,18 @@
+import { Pagination } from '@common/web/pagination/pagination';
+import { PaginationImpl } from '@common/web/pagination/pagination-impl';
+import { WebResponse } from '@common/web/web.response';
+import { WebResponseImpl } from '@common/web/web.response-impl';
 import {
   CallHandler,
   ExecutionContext,
+  HttpException,
   HttpStatus,
   Injectable,
   InternalServerErrorException,
   NestInterceptor,
 } from '@nestjs/common';
 import { Response as ExpressResponse } from 'express';
-import { map, Observable } from 'rxjs';
-import { Pagination } from '@common/web/pagination/pagination';
-import { PaginationImpl } from '@common/web/pagination/pagination-impl';
-import { WebResponse } from '@common/web/web.response';
-import { WebResponseImpl } from '@common/web/web.response-impl';
+import { catchError, map, Observable, throwError } from 'rxjs';
 
 interface Response {
   statusCode: HttpStatus;
@@ -53,6 +54,22 @@ export class ResponseInterceptor implements NestInterceptor {
 
         throw new InternalServerErrorException('Response type is invalid');
       }),
+      catchError((error) =>
+        throwError(() => {
+          const responseTime = `${Date.now() - now}ms`;
+
+          if (error instanceof HttpException) {
+            return this.buildErrorResponse(error, responseTime);
+          }
+
+          return new InternalServerErrorException({
+            statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+            message: 'Something went wrong :(',
+            error: 'Internal Server Error',
+            responseTime,
+          });
+        }),
+      ),
     );
   }
 
@@ -86,5 +103,18 @@ export class ResponseInterceptor implements NestInterceptor {
       message,
       data,
     });
+  }
+
+  buildErrorResponse(
+    error: HttpException,
+    responseTime: string,
+  ): HttpException {
+    return new HttpException(
+      {
+        ...(error.getResponse() as object),
+        responseTime,
+      },
+      error.getStatus() || HttpStatus.INTERNAL_SERVER_ERROR,
+    );
   }
 }

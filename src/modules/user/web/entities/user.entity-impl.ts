@@ -37,8 +37,6 @@ export class UserEntityImpl implements UserEntity {
 
   @BeforeInsert()
   async hashPassword() {
-    console.log('Hashing password...');
-
     /** Here you can hash the password before inserting to the data source */
     this.password = await bcrypt.hash(this.password, 10);
   }
