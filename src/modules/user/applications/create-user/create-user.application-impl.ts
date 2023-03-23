@@ -1,4 +1,4 @@
-import { UserUseCase } from '@module-user/interfaces/user-usecase';
+import { UserUseCase } from '@module-user/constants/user-usecase';
 import { CreateUserService } from '@module-user/services/create-user/create-user.service';
 import { CreateUserDto } from '@module-user/web/dto/create-user.dto';
 import { Inject, Injectable } from '@nestjs/common';

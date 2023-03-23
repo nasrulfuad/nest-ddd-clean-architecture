@@ -1,4 +1,4 @@
-import { UserUseCase } from '@module-user/interfaces/user-usecase';
+import { UserUseCase } from '@module-user/constants/user-usecase';
 import { FindOneUserService } from '@module-user/services/findone-user/findone-user';
 import { UserEntity } from '@module-user/web/entities/user.entity';
 import { Inject, Injectable } from '@nestjs/common';
@@ -15,7 +15,7 @@ export class FindOneUserApplicationImpl implements FindOneUserApplication {
 
   async execute(id: string): Promise<UserEntity | null> {
     return await this.dataSource.transaction(async (transaction) => {
-      return this.findOneUserService.handler(transaction, id);
+      return await this.findOneUserService.handler(transaction, id);
     });
   }
 }

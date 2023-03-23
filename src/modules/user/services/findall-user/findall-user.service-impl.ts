@@ -1,4 +1,4 @@
-import { UserUseCase } from '@module-user/interfaces/user-usecase';
+import { UserUseCase } from '@module-user/constants/user-usecase';
 import { UserRepository } from '@module-user/repository/user.repository';
 import { FindAllUserQueryDto } from '@module-user/web/dto/findall-user.query-dto';
 import { UserEntity } from '@module-user/web/entities/user.entity';
