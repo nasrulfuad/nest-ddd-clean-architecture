@@ -1,8 +1,8 @@
 import {
   PaginationImpl,
-  PaginationMetaImpl
+  PaginationMetaImpl,
 } from '@common/web/pagination/pagination-impl';
-import { WebResponseImpl } from '@common/web/web.response-impl';
+import { WebResponseImplBuilder } from '@common/web/web.response-impl';
 import {
   Body,
   Controller,
@@ -13,7 +13,7 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
-  Query
+  Query,
 } from '@nestjs/common';
 import { CreateUserApplication } from './applications/create-user/create-user.application';
 import { FindAllUserApplication } from './applications/findall-user/findall-user.application';
@@ -21,6 +21,7 @@ import { FindOneUserApplication } from './applications/findone-user/findone-user
 import { UserUseCase } from './constants/user-usecase';
 import { CreateUserDto } from './web/dto/create-user.dto';
 import { FindAllUserQueryDto } from './web/dto/findall-user.query-dto';
+import { UserEntity } from './web/entities/user.entity';
 import { UserEntityImpl } from './web/entities/user.entity-impl';
 
 @Controller({
@@ -40,10 +41,11 @@ export class UserController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createUserDto: CreateUserDto) {
-    return new WebResponseImpl(
-      'Create a user successfully',
-      await this.createUserApplication.execute(createUserDto),
-    );
+    const d = await this.createUserApplication.execute(createUserDto);
+    return new WebResponseImplBuilder<UserEntity>()
+      .setMessage('Create a user successfully')
+      .setData(d)
+      .buildAndtransform(UserEntityImpl);
   }
 
   @Get()
@@ -52,11 +54,13 @@ export class UserController {
       findAllUserQueryDto,
     );
 
+    const d = new WebResponseImplBuilder<UserEntity[]>()
+      .setMessage('Get all users successfully')
+      .setData(items)
+      .buildAndtransform(UserEntityImpl);
+
     return new PaginationImpl(
-      new WebResponseImpl<UserEntityImpl[]>(
-        'Get all users successfully',
-        items,
-      ),
+      d,
       new PaginationMetaImpl(
         findAllUserQueryDto.page,
         findAllUserQueryDto.perPage,
@@ -70,9 +74,11 @@ export class UserController {
     @Param('id', new ParseUUIDPipe())
     id: string,
   ) {
-    return new WebResponseImpl(
-      'Get a user successfully',
-      await this.findOneUserApplication.execute(id),
-    );
+    const r = await this.findOneUserApplication.execute(id);
+
+    return new WebResponseImplBuilder<UserEntity>()
+      .setMessage('Get a user successfully')
+      .setData(r)
+      .buildAndtransform(UserEntityImpl);
   }
 }

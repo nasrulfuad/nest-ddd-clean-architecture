@@ -1,7 +1,6 @@
 import { Pagination } from '@common/web/pagination/pagination';
 import { PaginationImpl } from '@common/web/pagination/pagination-impl';
-import { WebResponse } from '@common/web/web.response';
-import { WebResponseImpl } from '@common/web/web.response-impl';
+import { WebResponse, WebResponseAbstract } from '@common/web/web.response';
 import {
   CallHandler,
   ExecutionContext,
@@ -41,7 +40,7 @@ export class ResponseInterceptor implements NestInterceptor {
             statusCode,
             meta,
           });
-        } else if (d instanceof WebResponseImpl) {
+        } else if (d instanceof WebResponseAbstract) {
           const { message, data } = d;
 
           return this.buildResponseDefault({
@@ -51,6 +50,8 @@ export class ResponseInterceptor implements NestInterceptor {
             data,
           });
         }
+
+        console.log(d);
 
         throw new InternalServerErrorException('Response type is invalid');
       }),

@@ -143,7 +143,6 @@ describe('UserController', () => {
           id: expect.any(String),
           email: user.email,
           name: user.name,
-          password: user.password,
           createdAt: expect.any(String),
           updatedAt: expect.any(String),
         },
