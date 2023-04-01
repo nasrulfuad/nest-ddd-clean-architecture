@@ -12,9 +12,10 @@ import { UserEntity } from './user.entity';
 
 @Entity({ name: 'users' })
 export class UserEntityImpl implements UserEntity {
-  constructor(name: string, email: string, password: string) {
+  constructor(name: string, email: string, age: number, password: string) {
     this.email = email;
     this.name = name;
+    this.age = age;
     this.password = password;
   }
 
@@ -23,9 +24,12 @@ export class UserEntityImpl implements UserEntity {
 
   @Column()
   name: string;
-
+  
   @Column({ unique: true })
   email: string;
+  
+  @Column({ type: 'integer' })
+  age: number;
 
   @Column()
   @Exclude()

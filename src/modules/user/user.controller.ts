@@ -14,17 +14,20 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import { CreateUserApplication } from './applications/create-user/create-user.application';
+import { DeleteUserApplication } from './applications/delete-user/delete-user.application';
 import { FindAllUserApplication } from './applications/findall-user/findall-user.application';
 import { FindOneUserApplication } from './applications/findone-user/findone-user.appliaction';
+import { UpdateUserApplication } from './applications/update-user/update-user.application';
 import { UserUseCase } from './constants/user-usecase';
 import { CreateUserDto } from './web/dto/create-user.dto';
 import { FindAllUserQueryDto } from './web/dto/findall-user.query-dto';
+import { UpdateUserDto } from './web/dto/update-user.dto';
 import { UserEntity } from './web/entities/user.entity';
 import { UserEntityImpl } from './web/entities/user.entity-impl';
-import { DeleteUserApplication } from './applications/delete-user/delete-user.application';
 
 @Controller({
   path: 'users',
@@ -40,6 +43,8 @@ export class UserController {
     private findOneUserApplication: FindOneUserApplication,
     @Inject(UserUseCase.applications.DeleteUserApplication)
     private deleteUserApplication: DeleteUserApplication,
+    @Inject(UserUseCase.applications.UpdateUserApplication)
+    private updateUserApplication: UpdateUserApplication,
   ) {}
 
   @Post()
@@ -98,6 +103,21 @@ export class UserController {
 
     return new WebResponseImplBuilder<UserEntity>()
       .setMessage('Delete a user successfully')
+      .buildAndtransform(UserEntityImpl);
+  }
+
+  @Put('/:id')
+  @HttpCode(HttpStatus.ACCEPTED)
+  async update(
+    @Param('id', new ParseUUIDPipe())
+    id: string,
+    @Body() updateUserDto: UpdateUserDto
+  ) {
+    const d = await this.updateUserApplication.execute(id, updateUserDto);
+
+    return new WebResponseImplBuilder<UserEntity>()
+      .setMessage('Update a user successfully')
+      .setData(d)
       .buildAndtransform(UserEntityImpl);
   }
 }

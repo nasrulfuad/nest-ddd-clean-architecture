@@ -2,7 +2,8 @@ import { CreateUserDto } from '@module-user/web/dto/create-user.dto';
 import { FindAllUserQueryDto } from '@module-user/web/dto/findall-user.query-dto';
 import { UserEntity } from '@module-user/web/entities/user.entity';
 import { UserEntityImpl } from '@module-user/web/entities/user.entity-impl';
-import { EntityManager, FindManyOptions, ILike } from 'typeorm';
+import { EntityManager, FindManyOptions, ILike, Not } from 'typeorm';
+import { UpdateUserDto } from '../web/dto/update-user.dto';
 import { UserRepository } from './user.repository';
 
 export class UserRepositoryImpl<T extends EntityManager>
@@ -12,11 +13,11 @@ export class UserRepositoryImpl<T extends EntityManager>
     transaction: T,
     createUserDto: CreateUserDto,
   ): Promise<UserEntity> {
-    const { name, email, password } = createUserDto;
+    const { name, email, age, password } = createUserDto;
 
     return await transaction.save(
       UserEntityImpl,
-      new UserEntityImpl(name, email, password),
+      new UserEntityImpl(name, email, age, password),
     );
   }
 
@@ -60,6 +61,16 @@ export class UserRepositoryImpl<T extends EntityManager>
   async delete(transaction: T, id: string): Promise<void> {
     await transaction.delete(UserEntityImpl, {
       id,
+    });
+  }
+
+  async update(transaction: T, id: string, updateUserDto: UpdateUserDto): Promise<UserEntity> {
+    return await transaction.save(UserEntityImpl, { id, ...updateUserDto });
+  }
+
+  async checkEmailExist(transaction: T, id: string, email: string): Promise<UserEntity> {
+    return await transaction.findOne(UserEntityImpl, {
+      where: { email, id: Not(id) },
     });
   }
 }
