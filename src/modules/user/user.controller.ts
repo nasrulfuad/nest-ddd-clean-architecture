@@ -6,6 +6,7 @@ import { WebResponseImplBuilder } from '@common/web/web.response-impl';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -23,6 +24,7 @@ import { CreateUserDto } from './web/dto/create-user.dto';
 import { FindAllUserQueryDto } from './web/dto/findall-user.query-dto';
 import { UserEntity } from './web/entities/user.entity';
 import { UserEntityImpl } from './web/entities/user.entity-impl';
+import { DeleteUserApplication } from './applications/delete-user/delete-user.application';
 
 @Controller({
   path: 'users',
@@ -36,6 +38,8 @@ export class UserController {
     private findAllUserApplication: FindAllUserApplication,
     @Inject(UserUseCase.applications.FindOneUserApplication)
     private findOneUserApplication: FindOneUserApplication,
+    @Inject(UserUseCase.applications.DeleteUserApplication)
+    private deleteUserApplication: DeleteUserApplication,
   ) {}
 
   @Post()
@@ -49,6 +53,7 @@ export class UserController {
   }
 
   @Get()
+  @HttpCode(HttpStatus.OK)
   async findAll(@Query() findAllUserQueryDto: FindAllUserQueryDto) {
     const [items, totalItems] = await this.findAllUserApplication.execute(
       findAllUserQueryDto,
@@ -70,6 +75,7 @@ export class UserController {
   }
 
   @Get('/:id')
+  @HttpCode(HttpStatus.OK)
   async findOne(
     @Param('id', new ParseUUIDPipe())
     id: string,
@@ -79,6 +85,19 @@ export class UserController {
     return new WebResponseImplBuilder<UserEntity>()
       .setMessage('Get a user successfully')
       .setData(r)
+      .buildAndtransform(UserEntityImpl);
+  }
+
+  @Delete('/:id')
+  @HttpCode(HttpStatus.ACCEPTED)
+  async delete(
+    @Param('id', new ParseUUIDPipe())
+    id: string,
+  ) {
+    await this.deleteUserApplication.execute(id);
+
+    return new WebResponseImplBuilder<UserEntity>()
+      .setMessage('Delete a user successfully')
       .buildAndtransform(UserEntityImpl);
   }
 }

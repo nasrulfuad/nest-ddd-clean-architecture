@@ -2,11 +2,9 @@ import { CreateUserDto } from '@module-user/web/dto/create-user.dto';
 import { FindAllUserQueryDto } from '@module-user/web/dto/findall-user.query-dto';
 import { UserEntity } from '@module-user/web/entities/user.entity';
 import { UserEntityImpl } from '@module-user/web/entities/user.entity-impl';
-import { Injectable } from '@nestjs/common';
 import { EntityManager, FindManyOptions, ILike } from 'typeorm';
 import { UserRepository } from './user.repository';
 
-@Injectable()
 export class UserRepositoryImpl<T extends EntityManager>
   implements UserRepository<T>
 {
@@ -56,6 +54,12 @@ export class UserRepositoryImpl<T extends EntityManager>
   async findByEmail(transaction: T, email: string): Promise<UserEntity> {
     return await transaction.findOne(UserEntityImpl, {
       where: { email },
+    });
+  }
+
+  async delete(transaction: T, id: string): Promise<void> {
+    await transaction.delete(UserEntityImpl, {
+      id,
     });
   }
 }

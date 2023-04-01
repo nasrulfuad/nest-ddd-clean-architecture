@@ -63,6 +63,9 @@ export class ResponseInterceptor implements NestInterceptor {
             return this.buildErrorResponse(error, responseTime);
           }
 
+          // TODO add error logger
+          console.error(error);
+
           return new InternalServerErrorException({
             statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
             message: 'Something went wrong :(',

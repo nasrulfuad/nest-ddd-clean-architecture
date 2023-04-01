@@ -3,7 +3,7 @@ import { UserRepository } from '@module-user/repository/user.repository';
 import { UserEntity } from '@module-user/web/entities/user.entity';
 import { Inject, NotFoundException } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
-import { FindOneUserService } from './findone-user';
+import { FindOneUserService } from './findone-user.service';
 
 export class FindOneUserServiceImpl<T extends EntityManager>
   implements FindOneUserService<T>

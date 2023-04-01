@@ -1,11 +1,10 @@
 import { UserUseCase } from '@module-user/constants/user-usecase';
-import { FindOneUserService } from '@module-user/services/findone-user/findone-user';
+import { FindOneUserService } from '@module-user/services/findone-user/findone-user.service';
 import { UserEntity } from '@module-user/web/entities/user.entity';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { DataSource, EntityManager } from 'typeorm';
 import { FindOneUserApplication } from './findone-user.appliaction';
 
-@Injectable()
 export class FindOneUserApplicationImpl implements FindOneUserApplication {
   constructor(
     @Inject(UserUseCase.services.FindOneUserService)

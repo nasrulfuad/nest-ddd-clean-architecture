@@ -14,4 +14,6 @@ export interface UserRepository<T> {
   findByEmail(transaction: T, email: string): Promise<UserEntity | null>;
   /** Find a user by id */
   findById(transaction: T, id: string): Promise<UserEntity | null>;
+  /** Delete a user by id */
+  delete(transaction: T, id: string): Promise<void>;
 }
