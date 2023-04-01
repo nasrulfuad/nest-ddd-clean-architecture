@@ -5,6 +5,7 @@ import { AppModule } from '@src/app.module';
 import { UserUseCase } from '@src/modules/user/constants/user-usecase';
 import { UserRepository } from '@src/modules/user/repository/user.repository';
 import { CreateUserDto } from '@src/modules/user/web/dto/create-user.dto';
+import { UpdateUserDto } from '@src/modules/user/web/dto/update-user.dto';
 import { UserEntity } from '@src/modules/user/web/entities/user.entity';
 import { UserEntityImpl } from '@src/modules/user/web/entities/user.entity-impl';
 import * as request from 'supertest';
@@ -118,7 +119,7 @@ describe('UserController', () => {
     });
   });
 
-  describe('Find user by id', () => {
+  describe('Find a user by id', () => {
     it('[GET] /api/v1/users/:id ✅ Success get a user by id', async () => {
       const createUserDto: CreateUserDto = {
         name: 'test',
@@ -166,7 +167,7 @@ describe('UserController', () => {
     });
   });
 
-  describe('Delete user by id', () => {
+  describe('Delete a user by id', () => {
     it('[DELETE] /api/v1/users/:id ✅ Success delete a user by id', async () => {
       const createUserDto: CreateUserDto = {
         name: 'test',
@@ -203,6 +204,105 @@ describe('UserController', () => {
         statusCode: HttpStatus.NOT_FOUND,
         error: 'Not Found',
         message: 'User not found',
+      });
+    });
+  });
+
+  describe('Update a user by id', () => {
+    it('[PUT] /api/v1/users/:id ✅ Success update a user by id', async () => {
+      const createUserDto: CreateUserDto = {
+        name: 'test',
+        email: 'test@test.com',
+        age: 13,
+        password: 'test123',
+      };
+
+      const updateUserDto: UpdateUserDto = {
+        name: 'test-update',
+        email: 'test@test-update.com',
+        age: 133,
+      };
+
+      const user = await dataSource.transaction<UserEntity>((transaction) =>
+        userRepository.create(transaction, createUserDto),
+      );
+
+      const r: request.Response = await request(app.getHttpServer())
+        .put(`/api/v1/users/${user.id}`)
+        .send(updateUserDto);
+
+      expect(r.statusCode).toBe(HttpStatus.ACCEPTED);
+      expect(r.body).toEqual({
+        responseTime: expect.any(String),
+        statusCode: HttpStatus.ACCEPTED,
+        message: 'Update a user successfully',
+        data: {
+          id: user.id,
+          email: updateUserDto.email,
+          name: updateUserDto.name,
+          age: updateUserDto.age,
+          updatedAt: expect.any(String),
+        },
+      });
+    });
+
+    it('[PUT] /api/v1/users/:id ❌ Failed to update a user because the id not found', async () => {
+      const updateUserDto: UpdateUserDto = {
+        name: 'test-update',
+        email: 'test@test-update.com',
+        age: 133,
+      };
+
+      const r: request.Response = await request(app.getHttpServer())
+        .put(`/api/v1/users/9d10d81c-39ab-48f1-88e7-3a21725bb245`)
+        .send(updateUserDto);
+
+      expect(r.statusCode).toBe(HttpStatus.NOT_FOUND);
+      expect(r.body).toEqual({
+        responseTime: expect.any(String),
+        statusCode: HttpStatus.NOT_FOUND,
+        error: 'Not Found',
+        message: 'User not found',
+      });
+    });
+
+    it('[PUT] /api/v1/users/:id ❌ Failed to update a user because the email is already in use by other user', async () => {
+      const createUserDto: CreateUserDto = {
+        name: 'test',
+        email: 'test@test.com',
+        age: 13,
+        password: 'test123',
+      };
+
+      const createUserDto2: CreateUserDto = {
+        ...createUserDto,
+        email: 'test@test2.com',
+      };
+
+      const updateUserDto: UpdateUserDto = {
+        name: 'test-update',
+        email: createUserDto2.email,
+        age: 133,
+      };
+
+      const user1 = await dataSource.transaction<UserEntity>((transaction) =>
+        userRepository.create(transaction, createUserDto),
+      );
+
+      await dataSource.transaction<UserEntity>((transaction) =>
+        userRepository.create(transaction, createUserDto2),
+      );
+
+      const r: request.Response = await request(app.getHttpServer())
+        .put(`/api/v1/users/${user1.id}`)
+        .send(updateUserDto);
+
+      expect(r.statusCode).toBe(HttpStatus.CONFLICT);
+      expect(r.body).toEqual({
+        responseTime: expect.any(String),
+        statusCode: HttpStatus.CONFLICT,
+        error: 'Conflict',
+        message: `Email ${updateUserDto.email} is already in use`,
       });
     });
   });
