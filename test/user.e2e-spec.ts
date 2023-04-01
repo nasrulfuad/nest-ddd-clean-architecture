@@ -33,6 +33,11 @@ describe('UserController', () => {
     await app.close();
   });
 
+  afterEach(async () => {
+    const q = dataSource.createEntityManager();
+    await q.delete(UserEntityImpl, {});
+  });
+
   describe('Find all users', () => {
     it('[GET] /api/v1/users ✅ Find All users', async () => {
       const r: request.Response = await request(app.getHttpServer()).get(
@@ -110,11 +115,6 @@ describe('UserController', () => {
         message: 'Email already exists',
       });
     });
-
-    afterAll(async () => {
-      const q = dataSource.createEntityManager();
-      await q.delete(UserEntityImpl, {});
-    });
   });
 
   describe('Find user by id', () => {
@@ -149,8 +149,49 @@ describe('UserController', () => {
       });
     });
 
-    it('[GET] /api/v1/users/:id ❌ Filed to get a user by id because not found', async () => {
+    it('[GET] /api/v1/users/:id ❌ Failed to get a user by id because the id not found', async () => {
       const r: request.Response = await request(app.getHttpServer()).get(
+        `/api/v1/users/9d10d81c-39ab-48f1-88e7-3a21725bb245`,
+      );
+
+      expect(r.statusCode).toBe(HttpStatus.NOT_FOUND);
+      expect(r.body).toEqual({
+        responseTime: expect.any(String),
+        statusCode: HttpStatus.NOT_FOUND,
+        error: 'Not Found',
+        message: 'User not found',
+      });
+    });
+  });
+
+  describe('Delete user by id', () => {
+    it('[DELETE] /api/v1/users/:id ✅ Success delete a user by id', async () => {
+      const createUserDto: CreateUserDto = {
+        name: 'test',
+        email: 'test@test.com',
+        age: 13,
+        password: 'test123',
+      };
+
+      const user = await dataSource.transaction<UserEntity>((transaction) =>
+        userRepository.create(transaction, createUserDto),
+      );
+
+      const r: request.Response = await request(app.getHttpServer()).delete(
+        `/api/v1/users/${user.id}`,
+      );
+
+      expect(r.statusCode).toBe(HttpStatus.ACCEPTED);
+      expect(r.body).toEqual({
+        responseTime: expect.any(String),
+        statusCode: HttpStatus.ACCEPTED,
+        message: 'Delete a user successfully',
+        data: null,
+      });
+    });
+
+    it('[DELETE] /api/v1/users/:id ❌ Failed to delete a user by id because the id not found', async () => {
+      const r: request.Response = await request(app.getHttpServer()).delete(
         `/api/v1/users/9d10d81c-39ab-48f1-88e7-3a21725bb245`,
       );
 
